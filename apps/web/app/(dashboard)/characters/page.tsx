@@ -1,37 +1,28 @@
-import StatCard from "@/components/ui/StatCard";
-
-export default function DashboardPage() {
+export default function CharactersPage() {
   return (
     <>
       <h1 className="text-4xl font-bold text-white">
-        Bienvenido a Valkyrie Studio
+        Personajes
       </h1>
 
       <p className="mt-3 text-slate-400">
-        Comienza creando tu primer personaje virtual.
+        Administra todos tus personajes virtuales.
       </p>
 
-      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          title="Personajes"
-          value={0}
-          subtitle="Aún no has creado ninguno"
-        />
+      <div className="mt-8">
+        <button className="rounded-lg bg-violet-600 px-5 py-3 text-white hover:bg-violet-700">
+          + Nuevo personaje
+        </button>
+      </div>
 
-        <StatCard
-          title="Imágenes IA"
-          value={0}
-        />
+      <div className="mt-10 rounded-xl border border-dashed border-slate-700 p-12 text-center">
+        <h2 className="text-xl font-semibold text-white">
+          No hay personajes
+        </h2>
 
-        <StatCard
-          title="Videos IA"
-          value={0}
-        />
-
-        <StatCard
-          title="Publicaciones"
-          value={0}
-        />
+        <p className="mt-2 text-slate-400">
+          Crea tu primer personaje para comenzar.
+        </p>
       </div>
     </>
   );
