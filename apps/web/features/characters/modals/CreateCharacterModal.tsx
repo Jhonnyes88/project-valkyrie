@@ -1,13 +1,16 @@
 import CharacterForm from "../components/CharacterForm";
+import { Character } from "../types/character";
 
 interface CreateCharacterModalProps {
   open: boolean;
   onClose: () => void;
+  onCreateCharacter: (character: Character) => void;
 }
 
 export default function CreateCharacterModal({
   open,
   onClose,
+  onCreateCharacter,
 }: CreateCharacterModalProps) {
   if (!open) return null;
 
@@ -22,7 +25,10 @@ export default function CreateCharacterModal({
           Completa la información básica para crear un personaje.
         </p>
 
-        <CharacterForm onCancel={onClose} />
+        <CharacterForm
+          onCancel={onClose}
+          onCreateCharacter={onCreateCharacter}
+        />
       </div>
     </div>
   );

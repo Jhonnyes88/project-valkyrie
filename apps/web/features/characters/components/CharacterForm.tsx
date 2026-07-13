@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Character } from "../types/character";
 
 interface CharacterFormProps {
   onCancel: () => void;
+  onCreateCharacter: (character: Character) => void;
 }
 
 export default function CharacterForm({
   onCancel,
+  onCreateCharacter,
 }: CharacterFormProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -28,10 +31,47 @@ export default function CharacterForm({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    console.log(formData);
+  const newCharacter: Character = {
+    id: crypto.randomUUID(),
+
+    gender: formData.gender,
+
+    name: formData.name,
+    stageName: formData.stageName,
+
+    age: 0,
+    nationality: formData.nationality,
+    language: formData.language,
+
+    height: "",
+    weight: "",
+
+    skinColor: "",
+    eyeColor: "",
+    hairColor: "",
+
+    bodyType: "",
+
+    personality: "",
+
+    profession: formData.profession,
+
+    biography: "",
+
+    masterPrompt: "",
+
+    avatar: "",
+
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
+
+  onCreateCharacter(newCharacter);
+
+  onCancel();
+};
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-6">

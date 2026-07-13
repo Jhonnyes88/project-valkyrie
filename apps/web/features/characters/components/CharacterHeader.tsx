@@ -1,9 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import CreateCharacterModal from "../modals/CreateCharacterModal";
 
-export default function CharacterHeader() {
+import CreateCharacterModal from "../modals/CreateCharacterModal";
+import { Character } from "../types/character";
+
+interface CharacterHeaderProps {
+  onCreateCharacter: (character: Character) => void;
+}
+
+export default function CharacterHeader({
+  onCreateCharacter,
+}: CharacterHeaderProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,6 +38,7 @@ export default function CharacterHeader() {
       <CreateCharacterModal
         open={open}
         onClose={() => setOpen(false)}
+        onCreateCharacter={onCreateCharacter}
       />
     </>
   );
