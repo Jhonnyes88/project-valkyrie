@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Character } from "../types/character";
+import { useCharacterForm } from "../hooks/useCharacterForm";
 
 interface CharacterFormProps {
   onCancel: () => void;
@@ -12,69 +12,29 @@ export default function CharacterForm({
   onCancel,
   onCreateCharacter,
 }: CharacterFormProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    stageName: "",
-    gender: "",
-    nationality: "",
-    language: "",
-    profession: "",
+  const {
+    formData,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useCharacterForm({
+    onCreateCharacter,
+    onCancel,
   });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-
-  const newCharacter: Character = {
-    id: crypto.randomUUID(),
-
-    gender: formData.gender,
-
-    name: formData.name,
-    stageName: formData.stageName,
-
-    age: 0,
-    nationality: formData.nationality,
-    language: formData.language,
-
-    height: "",
-    weight: "",
-
-    skinColor: "",
-    eyeColor: "",
-    hairColor: "",
-
-    bodyType: "",
-
-    personality: "",
-
-    profession: formData.profession,
-
-    biography: "",
-
-    masterPrompt: "",
-
-    avatar: "",
-
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  onCreateCharacter(newCharacter);
-
-  onCancel();
-};
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+
+      {errors.length > 0 && (
+        <div className="rounded-lg border border-red-500 bg-red-900/30 p-4">
+          <ul className="list-disc pl-5 text-sm text-red-300">
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Nombre */}
       <div>
         <label className="mb-2 block text-sm font-medium text-slate-300">
