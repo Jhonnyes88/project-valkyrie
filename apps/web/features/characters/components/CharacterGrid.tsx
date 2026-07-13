@@ -1,7 +1,13 @@
 import CharacterCard from "./CharacterCard";
-import { characters } from "../data/characters";
+import { Character } from "../types/character";
 
-export default function CharacterGrid() {
+interface CharacterGridProps {
+  characters: Character[];
+}
+
+export default function CharacterGrid({
+  characters,
+}: CharacterGridProps) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
       {characters.map((character) => (

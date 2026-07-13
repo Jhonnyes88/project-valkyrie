@@ -1,31 +1,33 @@
 export interface Character {
+  // Identificación
   id: string;
 
+  // Información general
   name: string;
   stageName: string;
-
-  age: number;
+  gender: string;
   nationality: string;
   language: string;
-
-  height: string;
-  weight: string;
-
-  eyes: string;
-  hair: string;
-
-  bodyType: string;
-
-  personality: string;
-
   profession: string;
 
+  // Apariencia
+  age: number;
+  height: string;
+  weight: string;
+  skinColor: string;
+  eyeColor: string;
+  hairColor: string;
+  bodyType: string;
+
+  // Perfil
+  personality: string;
   biography: string;
 
+  // IA
   masterPrompt: string;
-
   avatar: string;
 
+  // Auditoría
   createdAt: Date;
   updatedAt: Date;
 }
