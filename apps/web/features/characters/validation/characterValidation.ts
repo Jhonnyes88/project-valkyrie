@@ -28,35 +28,66 @@ export interface CharacterFormData {
   avatar: string;
 }
 
+export type CharacterFieldErrors = Partial<
+  Record<keyof CharacterFormData, string>
+>;
+
+export interface CharacterValidationResult {
+  errors: string[];
+  fieldErrors: CharacterFieldErrors;
+}
+
 export function validateCharacter(
   data: CharacterFormData
-): string[] {
-
+): CharacterValidationResult {
   const errors: string[] = [];
 
+  const fieldErrors: CharacterFieldErrors = {};
+
   if (!data.name.trim()) {
-    errors.push("El nombre es obligatorio.");
+    const message = "El nombre es obligatorio.";
+
+    errors.push(message);
+    fieldErrors.name = message;
   }
 
   if (!data.stageName.trim()) {
-    errors.push("El nombre artístico es obligatorio.");
+    const message = "El nombre artístico es obligatorio.";
+
+    errors.push(message);
+    fieldErrors.stageName = message;
   }
 
   if (!data.gender) {
-    errors.push("Selecciona un género.");
+    const message = "Selecciona un género.";
+
+    errors.push(message);
+    fieldErrors.gender = message;
   }
 
   if (!data.nationality.trim()) {
-    errors.push("La nacionalidad es obligatoria.");
+    const message = "La nacionalidad es obligatoria.";
+
+    errors.push(message);
+    fieldErrors.nationality = message;
   }
 
   if (!data.language.trim()) {
-    errors.push("El idioma es obligatorio.");
+    const message = "El idioma es obligatorio.";
+
+    errors.push(message);
+    fieldErrors.language = message;
   }
 
   if (!data.profession.trim()) {
-    errors.push("La profesión es obligatoria.");
+    const message = "La profesión es obligatoria.";
+
+    errors.push(message);
+    fieldErrors.profession = message;
   }
 
-  return errors;
+  return {
+    errors,
+    fieldErrors,
+  };
 }

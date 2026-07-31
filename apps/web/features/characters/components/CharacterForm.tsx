@@ -1,5 +1,17 @@
 "use client";
 
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import ConfirmDeleteDialog from "@/components/common/ConfirmDeleteDialog";
+
+import AvatarSection from "../form/AvatarSection";
+import BiographySection from "../form/BiographySection";
+import GeneralSection from "../form/GeneralSection";
+import MasterPromptSection from "../form/MasterPromptSection";
+import PersonalitySection from "../form/PersonalitySection";
+import PhysicalSection from "../form/PhysicalSection";
+
 import { Character } from "../types/character";
 import { useCharacterForm } from "../hooks/useCharacterForm";
 
@@ -8,6 +20,7 @@ interface CharacterFormProps {
   onCancel: () => void;
   onCreateCharacter: (character: Character) => void;
   onUpdateCharacter: (character: Character) => void;
+  onDeleteCharacter: (id: string) => void;
 }
 
 export default function CharacterForm({
@@ -15,11 +28,16 @@ export default function CharacterForm({
   onCancel,
   onCreateCharacter,
   onUpdateCharacter,
+  onDeleteCharacter,
 }: CharacterFormProps) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const {
     formData,
     errors,
+    fieldErrors,
     handleChange,
+    setFieldValue,
     handleSubmit,
   } = useCharacterForm({
     character,
@@ -31,121 +49,90 @@ export default function CharacterForm({
   const isEditing = character !== null;
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-      {errors.length > 0 && (
-        <div className="rounded-lg border border-red-500 bg-red-900/30 p-4">
-          <ul className="list-disc pl-5 text-sm text-red-300">
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
+    <>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        {errors.length > 0 && (
+          <div className="rounded-lg border border-red-500 bg-red-900/30 p-4">
+            <ul className="list-disc pl-5 text-sm text-red-300">
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <AvatarSection
+          avatar={formData.avatar}
+          onAvatarChange={(avatar) => setFieldValue("avatar", avatar)}
+        />
+
+        <GeneralSection
+          formData={formData}
+          fieldErrors={fieldErrors}
+          handleChange={handleChange}
+        />
+
+        <PhysicalSection
+          formData={formData}
+          handleChange={handleChange}
+        />
+
+        <PersonalitySection
+          formData={formData}
+          handleChange={handleChange}
+        />
+
+        <BiographySection
+          formData={formData}
+          handleChange={handleChange}
+        />
+
+        <MasterPromptSection
+          formData={formData}
+          handleChange={handleChange}
+        />
+
+        <div className="flex justify-between pt-4">
+          {isEditing ? (
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => setConfirmOpen(true)}
+            >
+              Eliminar
+            </Button>
+          ) : (
+            <div />
+          )}
+
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+            >
+              Cancelar
+            </Button>
+
+            <Button type="submit">
+              {isEditing ? "Guardar cambios" : "Crear personaje"}
+            </Button>
+          </div>
         </div>
+      </form>
+
+      {character && (
+        <ConfirmDeleteDialog
+          open={confirmOpen}
+          title="Eliminar personaje"
+          description="Esta acción eliminará permanentemente el personaje y no podrá deshacerse."
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={() => {
+            setConfirmOpen(false);
+            onDeleteCharacter(character.id);
+          }}
+        />
       )}
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Nombre
-        </label>
-
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Nombre artístico
-        </label>
-
-        <input
-          type="text"
-          name="stageName"
-          value={formData.stageName}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Género
-        </label>
-
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        >
-          <option value="">Selecciona...</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Masculino">Masculino</option>
-          <option value="No binario">No binario</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Nacionalidad
-        </label>
-
-        <input
-          type="text"
-          name="nationality"
-          value={formData.nationality}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Idioma
-        </label>
-
-        <input
-          type="text"
-          name="language"
-          value={formData.language}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-slate-300">
-          Profesión
-        </label>
-
-        <input
-          type="text"
-          name="profession"
-          value={formData.profession}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white"
-        />
-      </div>
-
-      <div className="flex justify-end gap-3 pt-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-lg border border-slate-700 px-5 py-2 text-white"
-        >
-          Cancelar
-        </button>
-
-        <button
-          type="submit"
-          className="rounded-lg bg-violet-600 px-5 py-2 text-white"
-        >
-          {isEditing ? "Guardar cambios" : "Crear personaje"}
-        </button>
-      </div>
-    </form>
+    </>
   );
 }

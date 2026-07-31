@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Character } from "../types/character";
 import {
+  CharacterFieldErrors,
   CharacterFormData,
   validateCharacter,
 } from "../validation/characterValidation";
@@ -60,28 +61,52 @@ export function useCharacterForm({
   );
 
   const [errors, setErrors] = useState<string[]>([]);
+  const [fieldErrors, setFieldErrors] =
+    useState<CharacterFieldErrors>({});
 
   useEffect(() => {
     setFormData(createInitialFormData(character));
     setErrors([]);
+    setFieldErrors({});
   }, [character]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  const setFieldValue = <
+    K extends keyof CharacterFormData
+  >(
+    field: K,
+    value: CharacterFormData[K]
   ) => {
     setFormData((previous) => ({
       ...previous,
-      [e.target.name]: e.target.value,
+      [field]: value,
     }));
+
+    setFieldErrors((previous) => ({
+      ...previous,
+      [field]: undefined,
+    }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    setFieldValue(
+      e.target.name as keyof CharacterFormData,
+      e.target.value
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationErrors = validateCharacter(formData);
+    const validation = validateCharacter(formData);
 
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
+    setErrors(validation.errors);
+    setFieldErrors(validation.fieldErrors);
+
+    if (validation.errors.length > 0) {
       return;
     }
 
@@ -92,7 +117,7 @@ export function useCharacterForm({
       stageName: formData.stageName,
 
       gender: formData.gender,
-      age: formData.age,
+      age: Number(formData.age),
 
       nationality: formData.nationality,
       language: formData.language,
@@ -132,7 +157,9 @@ export function useCharacterForm({
   return {
     formData,
     errors,
+    fieldErrors,
     handleChange,
+    setFieldValue,
     handleSubmit,
   };
 }
