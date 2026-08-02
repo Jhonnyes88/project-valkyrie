@@ -1,4 +1,15 @@
-export type ProjectStatus = "draft" | "active" | "archived";
+export type ProjectStatus =
+  | "active"
+  | "paused"
+  | "archived";
+
+export type ProjectColor =
+  | "blue"
+  | "green"
+  | "purple"
+  | "orange"
+  | "red"
+  | "pink";
 
 export interface Project {
   id: string;
@@ -7,9 +18,9 @@ export interface Project {
 
   description: string;
 
-  coverImage: string;
-
   status: ProjectStatus;
+
+  color: ProjectColor;
 
   createdAt: Date;
 
