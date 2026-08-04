@@ -30,9 +30,12 @@ export default function ProjectsPage() {
   const {
     projects,
     createProject,
+    updateProject,
   } = useProjects(repository);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] =
+    useState<Project | null>(null);
 
   const {
     search,
@@ -56,8 +59,40 @@ export default function ProjectsPage() {
     await createProject(project);
 
     setModalOpen(false);
+    setSelectedProject(null);
 
     toast.success("Proyecto creado correctamente.");
+  };
+
+  const handleUpdateProject = async (
+    project: Project,
+    data: {
+      name: string;
+      description: string;
+      status: ProjectStatus;
+      color: ProjectColor;
+    },
+  ) => {
+    await updateProject({
+      ...project,
+      ...data,
+      updatedAt: new Date(),
+    });
+
+    setModalOpen(false);
+    setSelectedProject(null);
+
+    toast.success("Proyecto actualizado correctamente.");
+  };
+
+  const handleSelectProject = (project: Project) => {
+    setSelectedProject(project);
+    setModalOpen(true);
+  };
+
+  const handleOpenCreateModal = () => {
+    setSelectedProject(null);
+    setModalOpen(true);
   };
 
   return (
@@ -65,7 +100,7 @@ export default function ProjectsPage() {
       <ProjectToolbar
         search={search}
         onSearchChange={setSearch}
-        onCreateProject={() => setModalOpen(true)}
+        onCreateProject={handleOpenCreateModal}
       />
 
       {filteredProjects.length === 0 ? (
@@ -74,16 +109,24 @@ export default function ProjectsPage() {
           title="Aún no has creado proyectos"
           description="Crea tu primer proyecto para organizar personajes, recursos y contenido."
           actionLabel="Crear proyecto"
-          onAction={() => setModalOpen(true)}
+          onAction={handleOpenCreateModal}
         />
       ) : (
-        <ProjectGrid projects={filteredProjects} />
+        <ProjectGrid
+          projects={filteredProjects}
+          onSelectProject={handleSelectProject}
+        />
       )}
 
       <ProjectModal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        project={selectedProject}
+        onClose={() => {
+          setModalOpen(false);
+          setSelectedProject(null);
+        }}
         onCreateProject={handleCreateProject}
+        onUpdateProject={handleUpdateProject}
       />
     </>
   );

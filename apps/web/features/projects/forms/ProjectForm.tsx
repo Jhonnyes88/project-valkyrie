@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
+  Project,
   ProjectColor,
   ProjectStatus,
 } from "../types/project";
 
 interface ProjectFormProps {
+  project: Project | null;
   onCancel: () => void;
   onSubmit: (data: {
     name: string;
@@ -49,6 +51,7 @@ const colorClasses: Record<ProjectColor, string> = {
  * - Return project data to the parent.
  */
 export default function ProjectForm({
+  project,
   onCancel,
   onSubmit,
 }: ProjectFormProps) {
@@ -58,6 +61,21 @@ export default function ProjectForm({
     useState<ProjectStatus>("active");
   const [color, setColor] =
     useState<ProjectColor>("blue");
+
+  useEffect(() => {
+    if (!project) {
+      setName("");
+      setDescription("");
+      setStatus("active");
+      setColor("blue");
+      return;
+    }
+
+    setName(project.name);
+    setDescription(project.description);
+    setStatus(project.status);
+    setColor(project.color);
+  }, [project]);
 
   const handleSubmit = (
     e: React.FormEvent<HTMLFormElement>,
@@ -79,8 +97,6 @@ export default function ProjectForm({
       onSubmit={handleSubmit}
       className="space-y-6"
     >
-      {/* Basic Information */}
-
       <div className="space-y-2">
         <Label htmlFor="name">
           Nombre del proyecto
@@ -89,9 +105,7 @@ export default function ProjectForm({
         <Input
           id="name"
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
+          onChange={(e) => setName(e.target.value)}
           placeholder="Ej. Marketing 2026"
         />
       </div>
@@ -104,15 +118,11 @@ export default function ProjectForm({
         <Textarea
           id="description"
           value={description}
-          onChange={(e) =>
-            setDescription(e.target.value)
-          }
+          onChange={(e) => setDescription(e.target.value)}
           rows={4}
           placeholder="Describe el propósito del proyecto..."
         />
       </div>
-
-      {/* Status */}
 
       <div className="space-y-2">
         <Label htmlFor="status">
@@ -123,9 +133,7 @@ export default function ProjectForm({
           id="status"
           value={status}
           onChange={(e) =>
-            setStatus(
-              e.target.value as ProjectStatus,
-            )
+            setStatus(e.target.value as ProjectStatus)
           }
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
         >
@@ -134,8 +142,6 @@ export default function ProjectForm({
           <option value="archived">Archivado</option>
         </select>
       </div>
-
-      {/* Appearance */}
 
       <div className="space-y-3">
         <Label>Color</Label>
@@ -148,7 +154,7 @@ export default function ProjectForm({
               onClick={() => setColor(item)}
               className={`h-8 w-8 rounded-full border-2 transition ${
                 color === item
-                  ? "border-white scale-110"
+                  ? "scale-110 border-white"
                   : "border-transparent"
               }`}
             >
@@ -170,7 +176,7 @@ export default function ProjectForm({
         </Button>
 
         <Button type="submit">
-          Crear proyecto
+          {project ? "Guardar cambios" : "Crear proyecto"}
         </Button>
       </div>
     </form>

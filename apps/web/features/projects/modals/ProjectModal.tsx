@@ -9,48 +9,80 @@ import {
 
 import ProjectForm from "../forms/ProjectForm";
 import {
+  Project,
   ProjectColor,
   ProjectStatus,
 } from "../types/project";
 
 interface ProjectModalProps {
   open: boolean;
+  project: Project | null;
   onClose: () => void;
+
   onCreateProject: (data: {
     name: string;
     description: string;
     status: ProjectStatus;
     color: ProjectColor;
   }) => void;
+
+  onUpdateProject: (
+    project: Project,
+    data: {
+      name: string;
+      description: string;
+      status: ProjectStatus;
+      color: ProjectColor;
+    },
+  ) => void;
 }
 
 /**
  * ProjectModal
  *
  * Reusable modal used to create and edit projects.
- *
- * Responsibilities:
- * - Display the project form.
- * - Handle open/close state.
- * - Delegate form submission to the parent.
  */
 export default function ProjectModal({
   open,
+  project,
   onClose,
   onCreateProject,
+  onUpdateProject,
 }: ProjectModalProps) {
+  const isEditing = project !== null;
+
+  const handleSubmit = (data: {
+    name: string;
+    description: string;
+    status: ProjectStatus;
+    color: ProjectColor;
+  }) => {
+    if (project) {
+      onUpdateProject(project, data);
+      return;
+    }
+
+    onCreateProject(data);
+  };
+
   return (
-    <AlertDialog open={open} onOpenChange={onClose}>
+    <AlertDialog
+      open={open}
+      onOpenChange={onClose}
+    >
       <AlertDialogContent className="max-w-2xl">
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Nuevo proyecto
+            {isEditing
+              ? "Editar proyecto"
+              : "Nuevo proyecto"}
           </AlertDialogTitle>
         </AlertDialogHeader>
 
         <ProjectForm
+          project={project}
           onCancel={onClose}
-          onSubmit={onCreateProject}
+          onSubmit={handleSubmit}
         />
       </AlertDialogContent>
     </AlertDialog>
