@@ -1,86 +1,30 @@
+"use client";
 import { ArrowRight, FolderKanban, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 
 import StatCard from "@/components/ui/StatCard";
+import DashboardHero from "@/features/dashboard/components/DashboardHero";
+import DashboardStats from "@/features/dashboard/components/DashboardStats";
 
 export default function DashboardPage() {
+
+  const {
+    totalCharacters,
+    totalProjects,
+  } = useDashboard();
+
   return (
+
     <div className="space-y-10">
       {/* Hero */}
-      <section className="overflow-hidden rounded-3xl border border-slate-800/70 bg-gradient-to-br from-violet-600 via-fuchsia-600 to-indigo-700 p-10 shadow-2xl shadow-violet-900/20">
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-violet-100 backdrop-blur">
-            <Sparkles size={16} />
-            Bienvenido a Valkyrie Studio
-          </div>
-
-          <h1 className="mt-6 text-5xl font-bold leading-tight text-white">
-            Crea personajes virtuales impulsados por IA.
-          </h1>
-
-          <p className="mt-5 text-lg leading-8 text-violet-100/90">
-            Diseña personajes, organízalos por proyectos y prepárate para
-            generar contenido con inteligencia artificial desde un solo lugar.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/characters"
-              className="rounded-2xl bg-white px-6 py-3 font-semibold text-slate-900 transition hover:scale-[1.02]"
-            >
-              Crear personaje
-            </Link>
-
-            <Link
-              href="/projects"
-              className="flex items-center gap-2 rounded-2xl border border-white/30 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
-            >
-              Ver proyectos
-
-              <ArrowRight size={18} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <DashboardHero />
 
       {/* Estadísticas */}
-      <section>
-        <div className="mb-5">
-          <h2 className="text-2xl font-bold text-white">
-            Resumen
-          </h2>
-
-          <p className="text-slate-400">
-            Una vista rápida de tu espacio de trabajo.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard
-            title="Personajes"
-            value={0}
-            subtitle="Sin personajes"
-          />
-
-          <StatCard
-            title="Proyectos"
-            value={0}
-            subtitle="Sin proyectos"
-          />
-
-          <StatCard
-            title="Imágenes IA"
-            value={0}
-            subtitle="Próximamente"
-          />
-
-          <StatCard
-            title="Publicaciones"
-            value={0}
-            subtitle="Próximamente"
-          />
-        </div>
-      </section>
+      <DashboardStats
+        totalCharacters={totalCharacters}
+        totalProjects={totalProjects}
+      />
 
       {/* Acciones rápidas */}
       <section className="grid gap-6 lg:grid-cols-2">
