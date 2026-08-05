@@ -2,6 +2,9 @@ export interface Character {
   // Identificación
   id: string;
 
+  // Relación
+  projectId: string | null;
+
   // Información general
   name: string;
   stageName: string;

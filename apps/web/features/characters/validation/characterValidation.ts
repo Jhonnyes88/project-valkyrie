@@ -10,6 +10,8 @@ export interface CharacterFormData {
 
   profession: string;
 
+  projectId: string;
+
   height: string;
   weight: string;
 

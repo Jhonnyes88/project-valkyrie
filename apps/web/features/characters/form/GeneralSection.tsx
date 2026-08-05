@@ -18,6 +18,8 @@ interface GeneralSectionProps {
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
+
+  projectOptions?: SelectOption[];
 }
 
 const genderOptions: SelectOption[] = [
@@ -39,6 +41,7 @@ export default function GeneralSection({
   formData,
   fieldErrors,
   handleChange,
+  projectOptions = [],
 }: GeneralSectionProps) {
   return (
     <section className="space-y-6 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
@@ -75,9 +78,7 @@ export default function GeneralSection({
           />
         </FormField>
 
-        <FormField
-          label="Edad"
-        >
+        <FormField label="Edad">
           <Input
             type="number"
             name="age"
@@ -141,6 +142,28 @@ export default function GeneralSection({
             value={formData.language}
             onChange={handleChange}
             error={!!fieldErrors.language}
+          />
+        </FormField>
+
+        <FormField
+          className="md:col-span-2"
+          label="Proyecto"
+        >
+          <Select
+            name="projectId"
+            value={(formData as CharacterFormData & { projectId?: string | null }).projectId ?? ""}
+            onChange={(e) => {
+  console.log("name:", e.target.name);
+  console.log("value:", e.target.value);
+  handleChange(e);
+}}
+            options={[
+              {
+                value: "",
+                label: "Sin proyecto",
+              },
+              ...projectOptions,
+            ]}
           />
         </FormField>
       </div>

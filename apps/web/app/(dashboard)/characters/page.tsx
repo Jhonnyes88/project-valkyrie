@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Sparkles, SearchX } from "lucide-react";
 import { toast } from "sonner";
 
+import { SelectOption } from "@/components/ui/select";
 import EmptyState from "@/components/common/EmptyState";
 
 import CharacterGrid from "@/features/characters/components/CharacterGrid";
@@ -13,8 +14,11 @@ import CreateCharacterModal from "@/features/characters/modals/CreateCharacterMo
 
 import { useCharacters } from "@/features/characters/hooks/useCharacters";
 import { useCharacterSearch } from "@/features/characters/hooks/useCharacterSearch";
+import { useProjects } from "@/features/projects/hooks/useProjects";
 
 import { Character } from "@/features/characters/types/character";
+
+import { LocalStorageProjectRepository } from "@/features/projects/repositories/LocalStorageProjectRepository";
 
 export default function CharactersPage() {
   const {
@@ -24,6 +28,33 @@ export default function CharactersPage() {
     deleteCharacter,
   } = useCharacters();
 
+  const repository = useMemo(
+    () => new LocalStorageProjectRepository(),
+    [],
+  );
+
+  const { projects } = useProjects(repository);
+console.log("Projects cargados:", projects)
+  const projectOptions: SelectOption[] = useMemo(
+    () =>
+      projects.map((project) => ({
+        value: project.id,
+        label: project.name,
+      })),
+    [projects],
+  );
+
+  const projectNames = useMemo(
+    () =>
+      Object.fromEntries(
+        projects.map((project) => [
+          project.id,
+          project.name,
+        ]),
+      ) as Record<string, string>,
+    [projects],
+  );
+
   const [selectedCharacter, setSelectedCharacter] =
     useState<Character | null>(null);
 
@@ -32,19 +63,14 @@ export default function CharactersPage() {
   const {
     search,
     setSearch,
-
     gender,
     setGender,
-
     profession,
     setProfession,
-
     nationality,
     setNationality,
-
     sort,
     setSort,
-
     filteredCharacters,
   } = useCharacterSearch(characters);
 
@@ -114,6 +140,7 @@ export default function CharactersPage() {
         <CharacterGrid
           characters={filteredCharacters}
           onSelectCharacter={handleSelectCharacter}
+          projectNames={projectNames}
         />
       )}
 
@@ -127,6 +154,7 @@ export default function CharactersPage() {
         onCreateCharacter={handleAddCharacter}
         onUpdateCharacter={handleUpdateCharacter}
         onDeleteCharacter={handleDeleteCharacter}
+        projectOptions={projectOptions}
       />
     </>
   );

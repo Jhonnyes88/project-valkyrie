@@ -31,6 +31,8 @@ function createInitialFormData(
 
     profession: character?.profession ?? "",
 
+    projectId: character?.projectId ?? "",
+
     height: character?.height ?? "",
     weight: character?.weight ?? "",
 
@@ -123,6 +125,8 @@ export function useCharacterForm({
       language: formData.language,
 
       profession: formData.profession,
+
+      projectId: formData.projectId,
 
       height: formData.height,
       weight: formData.weight,

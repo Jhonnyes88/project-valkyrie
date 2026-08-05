@@ -1,3 +1,5 @@
+import { SelectOption } from "@/components/ui/select";
+
 import CharacterForm from "../components/CharacterForm";
 import { Character } from "../types/character";
 
@@ -8,6 +10,8 @@ interface CreateCharacterModalProps {
   onCreateCharacter: (character: Character) => void;
   onUpdateCharacter: (character: Character) => void;
   onDeleteCharacter: (id: string) => void;
+
+  projectOptions?: SelectOption[];
 }
 
 export default function CreateCharacterModal({
@@ -17,6 +21,7 @@ export default function CreateCharacterModal({
   onCreateCharacter,
   onUpdateCharacter,
   onDeleteCharacter,
+  projectOptions = [],
 }: CreateCharacterModalProps) {
   if (!open) return null;
 
@@ -25,7 +30,6 @@ export default function CreateCharacterModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
       <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-slate-900 shadow-2xl">
-
         <div className="border-b border-slate-800 p-8">
           <h2 className="text-2xl font-bold text-white">
             {isEditing ? "Editar personaje" : "Nuevo personaje"}
@@ -45,6 +49,7 @@ export default function CreateCharacterModal({
             onCreateCharacter={onCreateCharacter}
             onUpdateCharacter={onUpdateCharacter}
             onDeleteCharacter={onDeleteCharacter}
+            projectOptions={projectOptions}
           />
         </div>
       </div>

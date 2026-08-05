@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { SelectOption } from "@/components/ui/select";
 import ConfirmDeleteDialog from "@/components/common/ConfirmDeleteDialog";
 
 import AvatarSection from "../form/AvatarSection";
@@ -21,6 +22,8 @@ interface CharacterFormProps {
   onCreateCharacter: (character: Character) => void;
   onUpdateCharacter: (character: Character) => void;
   onDeleteCharacter: (id: string) => void;
+
+  projectOptions?: SelectOption[];
 }
 
 export default function CharacterForm({
@@ -29,6 +32,7 @@ export default function CharacterForm({
   onCreateCharacter,
   onUpdateCharacter,
   onDeleteCharacter,
+  projectOptions = [],
 }: CharacterFormProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -47,6 +51,7 @@ export default function CharacterForm({
   });
 
   const isEditing = character !== null;
+  console.log("Project options:", projectOptions);
 
   return (
     <>
@@ -63,13 +68,16 @@ export default function CharacterForm({
 
         <AvatarSection
           avatar={formData.avatar}
-          onAvatarChange={(avatar) => setFieldValue("avatar", avatar)}
+          onAvatarChange={(avatar) =>
+            setFieldValue("avatar", avatar)
+          }
         />
 
         <GeneralSection
           formData={formData}
           fieldErrors={fieldErrors}
           handleChange={handleChange}
+          projectOptions={projectOptions}
         />
 
         <PhysicalSection
@@ -115,7 +123,9 @@ export default function CharacterForm({
             </Button>
 
             <Button type="submit">
-              {isEditing ? "Guardar cambios" : "Crear personaje"}
+              {isEditing
+                ? "Guardar cambios"
+                : "Crear personaje"}
             </Button>
           </div>
         </div>
