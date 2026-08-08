@@ -30,6 +30,22 @@ export function useDashboard() {
     [projects],
   );
 
+  const characterCounts = useMemo(
+    () =>
+      characters.reduce<Record<string, number>>(
+        (accumulator, character) => {
+          if (character.projectId) {
+            accumulator[character.projectId] =
+              (accumulator[character.projectId] ?? 0) + 1;
+          }
+
+          return accumulator;
+        },
+        {},
+      ),
+    [characters],
+  );
+
   return {
     totalCharacters: characters.length,
     totalProjects: projects.length,
@@ -51,6 +67,7 @@ export function useDashboard() {
       .slice(0, 5),
 
     projectNames,
+    characterCounts,
 
     characters,
     projects,

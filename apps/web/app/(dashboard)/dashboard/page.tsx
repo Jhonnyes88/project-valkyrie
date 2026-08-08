@@ -7,6 +7,7 @@ import StatCard from "@/components/ui/StatCard";
 import DashboardHero from "@/features/dashboard/components/DashboardHero";
 import DashboardStats from "@/features/dashboard/components/DashboardStats";
 import RecentCharacters from "@/features/dashboard/components/RecentCharacters";
+import RecentProjects from "@/features/dashboard/components/RecentProjects";
 
 export default function DashboardPage() {
 
@@ -15,6 +16,8 @@ export default function DashboardPage() {
     totalProjects,
     recentCharacters,
     projectNames,
+    recentProjects,
+    characterCounts,
   } = useDashboard();
 
   return (
@@ -32,6 +35,11 @@ export default function DashboardPage() {
       <RecentCharacters
         characters={recentCharacters}
         projectNames={projectNames}
+      />
+
+      <RecentProjects
+        projects={recentProjects}
+        characterCounts={characterCounts}
       />
 
       {/* Acciones rápidas */}
