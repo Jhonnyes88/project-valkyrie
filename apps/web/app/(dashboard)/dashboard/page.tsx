@@ -6,12 +6,15 @@ import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import StatCard from "@/components/ui/StatCard";
 import DashboardHero from "@/features/dashboard/components/DashboardHero";
 import DashboardStats from "@/features/dashboard/components/DashboardStats";
+import RecentCharacters from "@/features/dashboard/components/RecentCharacters";
 
 export default function DashboardPage() {
 
   const {
     totalCharacters,
     totalProjects,
+    recentCharacters,
+    projectNames,
   } = useDashboard();
 
   return (
@@ -24,6 +27,11 @@ export default function DashboardPage() {
       <DashboardStats
         totalCharacters={totalCharacters}
         totalProjects={totalProjects}
+      />
+
+      <RecentCharacters
+        characters={recentCharacters}
+        projectNames={projectNames}
       />
 
       {/* Acciones rápidas */}

@@ -18,27 +18,41 @@ export function useDashboard() {
     projects,
   } = useProjects(repository);
 
+  const projectNames = useMemo(
+    () =>
+      projects.reduce<Record<string, string>>(
+        (accumulator, project) => {
+          accumulator[project.id] = project.name;
+          return accumulator;
+        },
+        {},
+      ),
+    [projects],
+  );
+
   return {
-  totalCharacters: characters.length,
-  totalProjects: projects.length,
+    totalCharacters: characters.length,
+    totalProjects: projects.length,
 
-  recentCharacters: [...characters]
-    .sort(
-      (a, b) =>
-        b.createdAt.getTime() -
-        a.createdAt.getTime(),
-    )
-    .slice(0, 5),
+    recentCharacters: [...characters]
+      .sort(
+        (a, b) =>
+          b.createdAt.getTime() -
+          a.createdAt.getTime(),
+      )
+      .slice(0, 5),
 
-  recentProjects: [...projects]
-    .sort(
-      (a, b) =>
-        b.createdAt.getTime() -
-        a.createdAt.getTime(),
-    )
-    .slice(0, 5),
+    recentProjects: [...projects]
+      .sort(
+        (a, b) =>
+          b.createdAt.getTime() -
+          a.createdAt.getTime(),
+      )
+      .slice(0, 5),
 
-  characters,
-  projects,
-};
+    projectNames,
+
+    characters,
+    projects,
+  };
 }
