@@ -31,6 +31,7 @@ export default function ProjectsPage() {
     projects,
     createProject,
     updateProject,
+    deleteProject,
   } = useProjects(repository);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -85,6 +86,17 @@ export default function ProjectsPage() {
     toast.success("Proyecto actualizado correctamente.");
   };
 
+  const handleDeleteProject = async (project: Project) => {
+    await deleteProject(project.id);
+
+    if (selectedProject?.id === project.id) {
+      setModalOpen(false);
+      setSelectedProject(null);
+    }
+
+    toast.success("Proyecto eliminado correctamente.");
+  };
+
   const handleSelectProject = (project: Project) => {
     setSelectedProject(project);
     setModalOpen(true);
@@ -115,6 +127,7 @@ export default function ProjectsPage() {
         <ProjectGrid
           projects={filteredProjects}
           onSelectProject={handleSelectProject}
+          onDeleteProject={handleDeleteProject}
         />
       )}
 

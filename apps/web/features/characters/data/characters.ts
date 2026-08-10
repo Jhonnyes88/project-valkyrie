@@ -4,6 +4,9 @@ export const characters: Character[] = [
   {
     id: "1",
 
+    // Relación
+    projectId: null,
+
     // Información general
     name: "Emma",
     stageName: "Emma Frost",

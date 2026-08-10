@@ -5,11 +5,13 @@ import { Project } from "../types/project";
 interface ProjectGridProps {
   projects: Project[];
   onSelectProject?: (project: Project) => void;
+  onDeleteProject?: (project: Project) => void;
 }
 
 export default function ProjectGrid({
   projects,
   onSelectProject,
+  onDeleteProject,
 }: ProjectGridProps) {
   return (
     <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
@@ -18,6 +20,7 @@ export default function ProjectGrid({
           key={project.id}
           project={project}
           onSelectProject={onSelectProject}
+          onDeleteProject={onDeleteProject}
         />
       ))}
     </section>
